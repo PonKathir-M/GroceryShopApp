@@ -1,0 +1,50 @@
+.App {
+  text-align: center;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+}
+
+.input-container {
+  margin-bottom: 1.5rem;
+}
+
+input[type="text"] {
+  padding: 0.5rem;
+  width: 200px;
+  margin-right: 0.5rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.grocery-list {
+  list-style: none;
+  padding: 0;
+}
+
+.grocery-item {
+  background: #f2f2f2;
+  margin: 0.5rem auto;
+  padding: 0.75rem;
+  width: 250px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.3s;
+}
+
+.grocery-item.purchased {
+  text-decoration: line-through;
+  background: #d4edda;
+}
+
+.delete-button {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  color: red;
+  cursor: pointer;
+}
