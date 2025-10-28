@@ -1,0 +1,34 @@
+// 04_React_Notes_App - App.jsx
+import React, { useState, useEffect } from 'react';
+export default function App(){
+const [notes,setNotes]=useState(()=>{try{return JSON.parse(localStorage.getItem('notes'))||[]}catch(e){return[]}})
+const [t,setT]=useState('')
+useEffect(()=>localStorage.setItem('notes',JSON.stringify(notes)),[notes])
+const add=()=>{ if(!t.trim())return; setNotes(n=>[{id:Date.now(),text:t},...n]); setT('') }
+const del=id=>setNotes(n=>n.filter(x=>x.id!==id))
+const edit=(id,txt)=>setNotes(n=>n.map(x=>x.id===id?{...x,text:txt}:x))
+return (
+<div>
+<h2>Sticky Notes</h2>
+<input value={t} onChange={e=>setT(e.target.value)} placeholder="note" />
+<button onClick={add}>Add</button>
+<div>
+{notes.map(n=>(
+<div key={n.id}>
+<EditableText text={n.text} onSave={val=>edit(n.id,val)} />
+<button onClick={()=>del(n.id)}>Delete</button>
+</div>
+))}
+</div>
+</div>
+)
+}
+
+
+function EditableText({text,onSave}){
+const [e,setE]=useState(false), [v,setV]=useState(text)
+useEffect(()=>setV(text),[text])
+if(!e) return <span onDoubleClick={()=>setE(true)}>{text}</span>
+return <span><input value={v} onChange={e1=>setV(e1.target.value)} /> <button onClick={()=>{onSave(v); setE(false)}}>Save</button></span>
+}
+
