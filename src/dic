@@ -1,0 +1,40 @@
+// Dictionary App using API - App.jsx
+import React, { useState } from "react";
+
+export default function App() {
+  const [word, setWord] = useState("");
+  const [meaning, setMeaning] = useState("");
+  const [error, setError] = useState("");
+
+  const searchWord = async () => {
+    if (!word.trim()) {
+      setError("Please enter a word");
+      setMeaning("");
+      return;
+    }
+    try {
+      setError("");
+      const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+      if (!res.ok) throw new Error("Word not found");
+      const data = await res.json();
+      setMeaning(data[0].meanings[0].definitions[0].definition);
+    } catch (err) {
+      setMeaning("");
+      setError("Word not found");
+    }
+  };
+
+  return (
+    <div style={{ textAlign: "center", marginTop: "40px" }}>
+      <h2>📘 Online Dictionary</h2>
+      <input
+        value={word}
+        onChange={(e) => setWord(e.target.value)}
+        placeholder="Enter a word"
+      />
+      <button onClick={searchWord}>Search</button>
+      {meaning && <p style={{ marginTop: "20px", fontSize: "18px" }}>Meaning: {meaning}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+    </div>
+  );
+}
