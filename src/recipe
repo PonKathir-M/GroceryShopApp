@@ -1,0 +1,17 @@
+// 12_React_Recipe_Finder (sample) - App.jsx
+import React, { useState } from 'react';
+export default function App(){
+const recs = [
+{id:1,name:'Pasta',ing:'pasta,tomato'},
+{id:2,name:'Salad',ing:'lettuce,tomato'}
+]
+const [q,setQ]=useState('')
+const res = recs.filter(r=>r.name.toLowerCase().includes(q.toLowerCase())||r.ing.includes(q.toLowerCase()))
+return (
+<div>
+<h2>Recipe Finder (sample)</h2>
+<input value={q} onChange={e=>setQ(e.target.value)} placeholder="search by name or ingredient" />
+<ul>{res.map(r=>(<li key={r.id}>{r.name} — {r.ing}</li>))}</ul>
+</div>
+)
+}
