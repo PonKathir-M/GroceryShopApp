@@ -1,0 +1,48 @@
+// 01_React_ToDo_List - App.jsx
+import React, { useState, useEffect } from 'react';
+
+
+export default function App() {
+const [tasks, setTasks] = useState(() => {
+try { return JSON.parse(localStorage.getItem('td'))||[] } catch(e){return []}
+});
+const [t, setT] = useState('');
+useEffect(()=>{ localStorage.setItem('td', JSON.stringify(tasks)) },[tasks])
+const add = ()=>{ if(!t.trim()) return; setTasks(prev=>[...prev,{id:Date.now(),text:t,done:false}]); setT('') }
+const del = id=> setTasks(prev=>prev.filter(x=>x.id!==id))
+const tog = id=> setTasks(prev=>prev.map(x=> x.id===id?{...x,done:!x.done}:x))
+const edit = (id,newText)=> setTasks(prev=>prev.map(x=> x.id===id?{...x,text:newText}:x))
+
+
+return (
+<div>
+<h2>To-Do List</h2>
+<input value={t} onChange={e=>setT(e.target.value)} placeholder="new task" />
+<button onClick={add}>Add</button>
+<ul>
+{tasks.map(x=> (
+<li key={x.id}>
+<input type="checkbox" checked={x.done} onChange={()=>tog(x.id)} />
+<EditableText text={x.text} onSave={val=>edit(x.id,val)} />
+<button onClick={()=>del(x.id)}>Delete</button>
+</li>
+))}
+</ul>
+</div>
+)
+}
+
+
+function EditableText({text,onSave}){
+const [e, setE] = useState(false)
+const [v, setV] = useState(text)
+useEffect(()=>setV(text),[text])
+if(!e) return <span onDoubleClick={()=>setE(true)}>{text}</span>
+return (
+<span>
+<input value={v} onChange={ev=>setV(ev.target.value)} />
+<button onClick={()=>{onSave(v); setE(false)}}>Save</button>
+<button onClick={()=>{setV(text); setE(false)}}>Cancel</button>
+</span>
+)
+}
