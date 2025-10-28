@@ -1,0 +1,13 @@
+import React, { useState } from 'react';
+export default function App(){
+const [n,setN]=useState(0)
+return (
+<div>
+<h2>Counter</h2>
+<div>{n}</div>
+<button onClick={()=>setN(n-1)}>-</button>
+<button onClick={()=>setN(n+1)}>+</button>
+<button onClick={()=>setN(0)}>Reset</button>
+</div>
+)
+}
