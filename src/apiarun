@@ -1,0 +1,87 @@
+import React, { useState, useEffect } from "react";
+
+function App() {
+  const [currencies, setCurrencies] = useState([]);
+  const [fromCurrency, setFromCurrency] = useState("USD");
+  const [toCurrency, setToCurrency] = useState("INR");
+  const [amount, setAmount] = useState(1);
+  const [convertedAmount, setConvertedAmount] = useState(0);
+
+  // Load available currencies only once
+  useEffect(() => {
+    fetch("https://api.exchangerate-api.com/v4/latest/USD")
+      .then((res) => res.json())
+      .then((data) => {
+        setCurrencies(Object.keys(data.rates));
+      })
+      .catch((err) => console.error("Error fetching data:", err));
+  }, []);
+
+  // Convert logic
+  const convertCurrency = () => {
+    if (!fromCurrency || !toCurrency || amount <= 0) return;
+
+    fetch(https://api.exchangerate-api.com/v4/latest/${fromCurrency})
+      .then((res) => res.json())
+      .then((data) => {
+        const rate = data.rates[toCurrency];
+        if (rate) {
+          setConvertedAmount((amount * rate).toFixed(2));
+        } else {
+          setConvertedAmount("N/A");
+        }
+      })
+      .catch((err) => console.error("Error converting:", err));
+  };
+
+  return (
+    <div>
+      <h2>Currency Converter</h2>
+
+      <div>
+        <label>From: </label>
+        <select
+          value={fromCurrency}
+          onChange={(e) => setFromCurrency(e.target.value)}
+        >
+          {currencies.map((cur) => (
+            <option key={cur} value={cur}>
+              {cur}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label>To: </label>
+        <select
+          value={toCurrency}
+          onChange={(e) => setToCurrency(e.target.value)}
+        >
+          {currencies.map((cur) => (
+            <option key={cur} value={cur}>
+              {cur}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label>Amount: </label>
+        <input
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+      </div>
+
+      <button onClick={convertCurrency}>Convert</button>
+
+      <h3>
+        {amount} {fromCurrency} = {convertedAmount} {toCurrency}
+      </h3>
+    </div>
+  );
+}
+
+export default App;
