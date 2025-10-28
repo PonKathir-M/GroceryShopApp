@@ -1,0 +1,69 @@
+// 06_React_Expense_Tracker - App.jsx
+import React, { useState, useEffect } from 'react';
+
+export default function App() {
+  const [items, setItems] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('exp')) || [];
+    } catch (e) {
+      return [];
+    }
+  });
+  const [t, setT] = useState('');
+  const [a, setA] = useState('');
+  const [editId, setEditId] = useState(null);
+
+  useEffect(() => localStorage.setItem('exp', JSON.stringify(items)), [items]);
+
+  const addOrUpdate = () => {
+    if (!t || !a) return;
+    if (editId) {
+      setItems(p =>
+        p.map(x => (x.id === editId ? { ...x, title: t, amt: parseFloat(a) } : x))
+      );
+      setEditId(null);
+    } else {
+      setItems(p => [{ id: Date.now(), title: t, amt: parseFloat(a) }, ...p]);
+    }
+    setT('');
+    setA('');
+  };
+
+  const del = id => setItems(p => p.filter(x => x.id !== id));
+  const edit = item => {
+    setT(item.title);
+    setA(item.amt);
+    setEditId(item.id);
+  };
+
+  const total = items.reduce((s, x) => s + (x.amt || 0), 0);
+
+  return (
+    <div style={{ textAlign: 'center', marginTop: '40px' }}>
+      <h2>Expense Tracker</h2>
+      <input
+        placeholder="Title"
+        value={t}
+        onChange={e => setT(e.target.value)}
+      />
+      <input
+        placeholder="Amount"
+        type="number"
+        value={a}
+        onChange={e => setA(e.target.value)}
+      />
+      <button onClick={addOrUpdate}>{editId ? 'Update' : 'Add'}</button>
+
+      <h3>Total: ₹{total}</h3>
+      <ul style={{ listStyle: 'none', padding: 0 }}>
+        {items.map(x => (
+          <li key={x.id} style={{ margin: '8px 0' }}>
+            {x.title} - ₹{x.amt}{' '}
+            <button onClick={() => edit(x)}>Edit</button>{' '}
+            <button onClick={() => del(x.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
