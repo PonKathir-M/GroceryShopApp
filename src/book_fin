@@ -1,0 +1,14 @@
+// 13_React_Book_Finder (sample) - App.jsx
+import React, { useState } from 'react';
+export default function App(){
+const books = [ {id:1,title:'Harry Potter',author:'J.K.'}, {id:2,title:'Clean Code',author:'Robert C.'} ]
+const [q,setQ]=useState('')
+const res = books.filter(b=> b.title.toLowerCase().includes(q.toLowerCase())||b.author.toLowerCase().includes(q.toLowerCase()))
+return (
+<div>
+<h2>Book Finder (sample)</h2>
+<input value={q} onChange={e=>setQ(e.target.value)} placeholder="title or author" />
+<ul>{res.map(b=>(<li key={b.id}>{b.title} — {b.author}</li>))}</ul>
+</div>
+)
+}
