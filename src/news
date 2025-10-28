@@ -1,0 +1,17 @@
+import React, { useState, useEffect } from 'react';
+export default function App(){
+const [arts,setArts]=useState([
+{id:1,title:'Sample Headline 1',desc:'Short desc 1'},
+{id:2,title:'Sample Headline 2',desc:'Short desc 2'}
+])
+const [q,setQ]=useState('')
+// In real app you would fetch from an API. Here we filter sample data
+const filtered = arts.filter(a=> a.title.toLowerCase().includes(q.toLowerCase())||a.desc.toLowerCase().includes(q.toLowerCase()))
+return (
+<div>
+<h2>News (sample)</h2>
+<input placeholder="search" value={q} onChange={e=>setQ(e.target.value)} />
+<ul>{filtered.map(a=>(<li key={a.id}><b>{a.title}</b><div>{a.desc}</div></li>))}</ul>
+</div>
+)
+}
