@@ -1,0 +1,14 @@
+import React, { useState } from 'react';
+export default function App(){
+const [h,setH]=useState(''),[w,setW]=useState(''),[res,setRes]=useState(null)
+const calc=()=>{ const hh=parseFloat(h), ww=parseFloat(w); if(!hh||!ww){setRes('Invalid'); return} const bmi=ww/(hh*hh); setRes(bmi.toFixed(2)) }
+return (
+<div>
+<h2>BMI Calculator</h2>
+<input placeholder="height in meters" value={h} onChange={e=>setH(e.target.value)} />
+<input placeholder="weight in kg" value={w} onChange={e=>setW(e.target.value)} />
+<button onClick={calc}>Calculate</button>
+{res!==null && <div>BMI: {res}</div>}
+</div>
+)
+}
