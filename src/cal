@@ -1,0 +1,26 @@
+// 02_React_Calculator - App.jsx
+import React, { useState } from 'react';
+export default function App(){
+const [exp, setExp] = useState('')
+const press = v => setExp(e=> e+v)
+const clr = ()=> setExp('')
+const del = ()=> setExp(e=> e.slice(0,-1))
+const eq = ()=>{
+try{ /* safe-eval minimal */ const res = Function('return ('+exp+')')(); setExp(String(res)) }catch(e){ setExp('Error') }
+}
+return (
+<div>
+<h2>Calculator</h2>
+<div>{exp}</div>
+<div>
+{['7','8','9','/','4','5','6','*','1','2','3','-','0','.','=','+'].map((k)=> (
+k==='=' ? <button key={k} onClick={eq}>{k}</button>
+: ['+','-','*','/'].includes(k) ? <button key={k} onClick={()=>press(k)}>{k}</button>
+: <button key={k} onClick={()=>press(k)}>{k}</button>
+))}
+<button onClick={del}>Del</button>
+<button onClick={clr}>Clear</button>
+</div>
+</div>
+)
+}
