@@ -1,0 +1,86 @@
+// 15_React_Dark_Light_Theme (toggle without CSS) - App.jsx
+import React, { useState } from 'react';
+export default function App(){
+const [dark,setDark]=useState(false)
+return (
+<div style={{background: dark? '#222' : '#fff', color: dark? '#fff':'#000', minHeight:'100vh'}}>
+<h2>Theme Toggle</h2>
+<button onClick={()=>setDark(d=>!d)}>Toggle</button>
+<div>Current: {dark?'Dark':'Light'}</div>
+</div>
+)
+}
+
+// 17_React_Calc_Age_From_Birth_Year - App.jsx
+import React, { useState } from 'react';
+export default function App(){
+const [y,setY]=useState(''),[res,setRes]=useState(null)
+const calc=()=>{ const yy=parseInt(y); if(!yy){setRes('Invalid');return} const age = new Date().getFullYear()-yy; setRes(age) }
+return (
+<div>
+<h2>Calculate Age</h2>
+<input value={y} onChange={e=>setY(e.target.value)} placeholder="birth year e.g.1990" />
+<button onClick={calc}>Calculate</button>
+{res!==null && <div>Age: {res}</div>}
+</div>
+)
+}
+
+
+
+
+// 18_React_Calendar_Picker (simple date input) - App.jsx
+import React, { useState } from 'react';
+export default function App(){
+const [d,setD]=useState('')
+return (
+<div>
+<h2>Date Picker</h2>
+<input type="date" value={d} onChange={e=>setD(e.target.value)} />
+<div>Selected: {d}</div>
+</div>
+)
+}
+
+
+
+
+// 19_React_Discount_Calculator - App.jsx
+import React, { useState } from 'react';
+export default function App(){
+const [price,setPrice]=useState(''),[disc,setDisc]=useState(''),[res,setRes]=useState(null)
+const calc=()=>{ const p=parseFloat(price)||0, d=parseFloat(disc)||0; setRes((p*(1-d/100)).toFixed(2)) }
+return (
+<div>
+<h2>Discount Calculator</h2>
+<input placeholder="price" value={price} onChange={e=>setPrice(e.target.value)} />
+<input placeholder="discount %" value={disc} onChange={e=>setDisc(e.target.value)} />
+<button onClick={calc}>Calculate</button>
+{res!==null && <div>Final Price: {res}</div>}
+</div>
+)
+}
+
+
+
+
+// 20_React_Online_Shopping_Bill_Calculator - App.jsx
+import React, { useState } from 'react';
+export default function App(){
+const [items,setItems]=useState([])
+const [name,setName]=useState(''),[price,setPrice]=useState(''),[qty,setQty]=useState('1')
+const add=()=>{ if(!name||!price) return; setItems(p=>[...p,{id:Date.now(),name,price:parseFloat(price),qty:parseInt(qty)||1}]); setName(''); setPrice(''); setQty('1') }
+const total = items.reduce((s,it)=>s+ it.price*it.qty,0)
+const del=id=>setItems(p=>p.filter(x=>x.id!==id))
+return (
+<div>
+<h2>Shopping Bill Calculator</h2>
+<input placeholder="item" value={name} onChange={e=>setName(e.target.value)} />
+<input placeholder="price" value={price} onChange={e=>setPrice(e.target.value)} />
+<input placeholder="qty" value={qty} onChange={e=>setQty(e.target.value)} />
+<button onClick={add}>Add</button>
+<ul>{items.map(it=>(<li key={it.id}>{it.name} x{it.qty} = {it.price*it.qty} <button onClick={()=>del(it.id)}>Del</button></li>))}</ul>
+<div>Total: {total}</div>
+</div>
+)
+}
