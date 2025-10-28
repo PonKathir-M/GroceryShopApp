@@ -1,0 +1,21 @@
+// 07_React_Contact_Book - App.jsx
+import React, { useState, useEffect } from 'react';
+export default function App(){
+const [list,setList]=useState(()=>{try{return JSON.parse(localStorage.getItem('contacts'))||[]}catch(e){return[]}})
+const [n,setN]=useState(''),[ph,setPh]=useState(''),[q,setQ]=useState('')
+useEffect(()=>localStorage.setItem('contacts',JSON.stringify(list)),[list])
+const add=()=>{ if(!n||!ph) return; setList(p=>[{id:Date.now(),name:n,phone:ph},...p]); setN(''); setPh('') }
+const search = list.filter(x=> x.name.toLowerCase().includes(q.toLowerCase()) || x.phone.includes(q))
+const del=id=>setList(p=>p.filter(x=>x.id!==id))
+return (
+<div>
+<h2>Contact Book</h2>
+<input value={n} onChange={e=>setN(e.target.value)} placeholder="name" />
+<input value={ph} onChange={e=>setPh(e.target.value)} placeholder="phone" />
+<button onClick={add}>Add</button>
+<hr/>
+<input value={q} onChange={e=>setQ(e.target.value)} placeholder="search" />
+<ul>{search.map(c=>(<li key={c.id}>{c.name} - {c.phone} <button onClick={()=>del(c.id)}>Del</button></li>))}</ul>
+</div>
+)
+}
